@@ -11,7 +11,7 @@ const logger = createLogger('auth')
 // TODO: Provide a URL that can be used to download a certificate that can be used
 // to verify JWT token signature.
 // To get this URL you need to go to an Auth0 page -> Show Advanced Settings -> Endpoints -> JSON Web Key Set
-const jwksUrl = '...'
+const jwksUrl = 'https://dev-fa35j9ci.us.auth0.com/.well-known/jwks.json'
 
 export const handler = async (
   event: CustomAuthorizerEvent
@@ -78,8 +78,6 @@ function getToken(authHeader: string): string {
 async function getCercificate(jwkUrl:string):Promise<string> {
   try{
     const jwk:AxiosResponse = await Axios.get(jwkUrl);
-    console.log('THE ENTIRE RESPONSE IS>>>>', JSON.stringify(jwk.data.keys))
-    console.log('THE DOWNLOADED CERTIFICATE IS>>>>>> ', jwk.data.keys[0]["x5c"][0] )
     const downloadedCert = jwk.data.keys[0]["x5c"][0];
     const cert = '-----BEGIN CERTIFICATE-----' + "\n" +
      downloadedCert  + "\n" + '-----END CERTIFICATE-----'
